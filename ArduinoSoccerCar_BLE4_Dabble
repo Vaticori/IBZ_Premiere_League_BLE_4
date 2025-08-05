@@ -1,0 +1,102 @@
+#define CUSTOM_SETTINGS
+#define INCLUDE_GAMEPAD_MODULE
+#include <Dabble.h>
+
+int right_back = 4;
+int right = 5;
+int left = 6;
+int left_back = 7;
+
+void setup() {
+  //Serial.begin(9600);
+  
+  Serial.begin(250000);      // make sure your Serial Monitor is also set at this baud rate.
+  Dabble.begin(9600);      //Enter baudrate of your bluetooth.Connect bluetooth on Bluetooth port present on evive.
+  pinMode(left, OUTPUT);  // left motors forward
+  pinMode(left_back, OUTPUT);   // left motors reverse
+  pinMode(right, OUTPUT);   // right motors forward
+  pinMode(right_back, OUTPUT);   // right motors reverse
+}
+
+void loop() {
+  Dabble.processInput();
+  Serial.println("Keypressed: ");
+  
+
+  if (GamePad.isUpPressed()) {  // move forward (all motors rotate in forward direction)
+    Serial.print("UP");
+    digitalWrite(right, HIGH);
+    digitalWrite(left, HIGH);
+
+    digitalWrite(right_back, LOW);
+    digitalWrite(left_back, LOW);
+
+  }
+  else if (GamePad.isDownPressed()) {  // move reverse (all motors rotate in reverse direction)
+    digitalWrite(left_back, HIGH);
+    digitalWrite(right_back, HIGH);
+
+    digitalWrite(right, LOW);
+    digitalWrite(left, LOW);
+    Serial.print("DOWN");
+
+  }
+  else if (GamePad.isLeftPressed()) {  // turn right (left side motors rotate in forward direction, right side motors don't rotate)
+    Serial.print("Left");
+    digitalWrite(right, HIGH);
+    
+    digitalWrite(left, LOW);
+    digitalWrite(right_back, LOW);
+    digitalWrite(left_back, LOW);
+
+  } 
+  else if (GamePad.isRightPressed()) {  // turn left (right side motors rotate in forward direction, left side motors don't rotate)
+    Serial.print("Right");
+    digitalWrite(left, HIGH);
+
+    digitalWrite(right, LOW);
+    digitalWrite(right_back, LOW);
+    digitalWrite(left_back, LOW);
+    
+  }
+  else if (GamePad.isSquarePressed()) {  // STOP (all motors stop)
+    Serial.print("Square");
+    digitalWrite(left, LOW);
+    digitalWrite(left_back, LOW);
+    digitalWrite(right_back, LOW);
+    digitalWrite(right, LOW);
+  }
+  else if (GamePad.isCirclePressed())
+  {
+    Serial.print("Circle");
+  }
+
+  else if (GamePad.isCrossPressed())
+  {
+    Serial.print("Cross");
+  }
+
+  else if (GamePad.isTrianglePressed())
+  {
+    Serial.print("Triangle");
+  }
+
+  else if (GamePad.isStartPressed())
+  {
+    Serial.print("Start");
+  }
+
+  else if (GamePad.isSelectPressed())
+  {
+    Serial.print("Select");
+  }
+  else {
+    //Serial.print("Square");
+    digitalWrite(left, LOW);
+    digitalWrite(left_back, LOW);
+    digitalWrite(right_back, LOW);
+    digitalWrite(right, LOW);
+  }
+  Serial.print('\t');
+  //delay(100);
+}
